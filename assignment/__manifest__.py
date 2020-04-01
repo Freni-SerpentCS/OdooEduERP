@@ -8,7 +8,7 @@
     'website': 'http://www.serpentcs.com',
     'license': "AGPL-3",
     'category': 'School Management',
-    'summary': 'A Module For Assignment Management In School',
+    'summary': 'A Module For Assignment Management In School or university',
     'complexity': 'easy',
     'images': ['static/description/Assignment_Management.png'],
     'depends': ['school'],
