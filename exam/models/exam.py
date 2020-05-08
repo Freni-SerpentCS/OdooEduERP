@@ -83,11 +83,10 @@ class ExtendedTimeTable(models.Model):
                                rec.teacher_id.id == rec.teacher_id.id and
                                rec.exm_date == rec.exm_date)]
                 if len(records) > 1:
-                    raise ValidationError(_('''You cannot set exam at same
-                                            time %s  at same day %s for
-                                            teacher %s!''') %
-                                           (rec.start_time, rec.day_of_week,
-                                            rec.teacher_id.name))
+                    raise ValidationError(_('''You cannot set exam at same \
+time %s  at same day %s for \
+teacher %s!''') % (rec.start_time, rec.day_of_week,
+                        rec.teacher_id.name))
 
 
 class ExtendedTimeTableLine(models.Model):
@@ -112,29 +111,29 @@ class ExtendedTimeTableLine(models.Model):
         for line in self:
             if line.exm_date:
                 dt = datetime.strptime(line.exm_date, "%Y-%m-%d")
-                if line.week_day != dt.strftime("%A").lower():
+                if line.week_day != dt.strftime("%a"):
                     return False
                 elif dt.__str__() < datetime.strptime(date.today().__str__(),
                                                       "%Y-%m-%d").__str__():
                     raise ValidationError(_('''Invalid Date Error !
-                        Either you have selected wrong day
-                                       for the date or you have selected\
-                                       invalid date!'''))
+Either you have selected wrong day \
+for the date or you have selected\
+invalid date!'''))
 
     @api.constrains('teacher_id')
     def check_supervisior_exam(self):
-            for rec in self:
-                if (rec.table_id.timetable_type == 'exam' and
-                        not rec.teacher_id):
-                        raise ValidationError(_('''PLease Enter Supervisior!
+        for rec in self:
+            if (rec.table_id.timetable_type == 'exam' and
+                    not rec.teacher_id):
+                raise ValidationError(_('''PLease Enter Supervisior!
                         '''))
 
     @api.constrains('start_time', 'end_time')
     def check_time(self):
         for rec in self:
             if rec.start_time >= rec.end_time:
-                raise ValidationError(_('''Start time should be less than end
-                time!'''))
+                raise ValidationError(_('''Start time should be less than end \
+time!'''))
 
     @api.constrains('teacher_id', 'class_room_id')
     def check_teacher_room(self):
@@ -147,7 +146,7 @@ class ExtendedTimeTableLine(models.Model):
                             self.table_id.timetable_type == 'exam' and
                             self.class_room_id == record.class_room_id and
                             self.start_time == record.start_time):
-                            raise ValidationError(_("The room is occupied!"))
+                        raise ValidationError(_("The room is occupied!"))
 
     @api.constrains('subject_id', 'class_room_id')
     def check_exam_date(self):
@@ -162,7 +161,7 @@ class ExtendedTimeTableLine(models.Model):
                 if (record.timetable_type == 'exam' and
                         self.table_id.timetable_type == 'exam' and
                         self.subject_id == rec.subject_id):
-                        raise ValidationError(_('''%s Subject Exam Already
+                    raise ValidationError(_('''%s Subject Exam Already
                         Taken''') % (self.subject_id.name))
                 if (record.timetable_type == 'exam' and
                         self.table_id.timetable_type == 'exam' and
@@ -191,7 +190,7 @@ class ExamExam(models.Model):
                         if not rec.start_date <= tt.exm_date <= rec.end_date:
                             raise ValidationError(_('Invalid Exam Schedule\
                             \n\nExam Dates must be in between Start\
-                            date and End date !'))
+date and End date !'))
 
     @api.constrains('active')
     def check_active(self):
@@ -428,7 +427,7 @@ class ExamResult(models.Model):
             if rec.result_ids:
                 for grade in rec.result_ids:
                     if not grade.grade_line_id.fail:
-                            rec.result = 'Pass'
+                        rec.result = 'Pass'
                     else:
                         flag = True
             if flag:
