@@ -1,19 +1,20 @@
 # See LICENSE file for full copyright and licensing details.
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class RejectReason(models.TransientModel):
     _name = "reject.reason"
 
-    reasons = fields.Text('Reject Reason')
+    reasons = fields.Text("Reject Reason")
 
     @api.multi
     def save_reason(self):
-        student_assignment = self.env['school.student.assignment']
+        student_assignment = self.env["school.student.assignment"]
         for rec in self:
-            student = student_assignment.browse(rec._context.get('active_id'))
+            student = student_assignment.browse(rec._context.get("active_id"))
             if student:
-                student.write({'state': 'reject',
-                               'rejection_reason': rec.reasons or ''})
+                student.write(
+                    {"state": "reject", "rejection_reason": rec.reasons or ""}
+                )
         return True
