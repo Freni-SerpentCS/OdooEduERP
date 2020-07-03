@@ -28,8 +28,6 @@ env:
 
 before_install:
   - "export DISPLAY=:911.0"
-  - "sh -e /etc/init.d/xvfb start"
-
 
 install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
