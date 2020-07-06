@@ -98,8 +98,8 @@
                               </group>
                         </page>
                         <page string="Parents">
-                            <field name="parent_id" 
-                                        attrs="{'readonly':[('state','in',['alumni','terminate'])]}" 
+                            <field name="parent_id"
+                                        attrs="{'readonly':[('state','in',['alumni','terminate'])]}"
                                         context="{'form_view_ref':'school.view_parent_form','default_parent_school':1}"
                                         options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
                         </page>
@@ -444,7 +444,7 @@
                     </div>
                     <group>
                         <group string="School Information">
-                            <field name="school_id" placeholder="School Name" required="1" 
+                            <field name="school_id" placeholder="School Name" required="1"
                                 attrs="{'readonly':[('state','=','alumni')]}" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
                             <field name="year" widget="selection" placeholder="Academic Year" readonly="1"/>
                             <field name="company_id" invisible="1"/>
@@ -453,7 +453,7 @@
                             <field name="medium_id" placeholder="Medium" widget="selection" attrs="{'readonly':[('state','=','alumni')]}"/>
                             <field name="standard_id" placeholder="Class" domain="[('school_id','=',school_id),('medium_id','=',medium_id)]" widget="selection" attrs="{'readonly':[('state','=','alumni')]}"/>
                             <field name="division_id" placeholder="Division" widget="selection" attrs="{'readonly':[('state','=','alumni')]}" invisible="1"/>
-                            
+
                         </group>
                     </group>
                     <group colspan="4">
@@ -634,7 +634,6 @@
         <field name="name">Admission Register</field>
         <field name="res_model">student.student</field>
         <field name="domain">['|',('state','=','draft'),('state','=','cancel')]</field>
-        <field name="view_type">form</field>
         <field name="view_id" ref="view_student_student_form_2" />
         <field name="search_view_id" ref="view_student_student_search_2" />
         <field name="view_mode">kanban,tree,form</field>
@@ -662,8 +661,7 @@
         <field name="domain">[('state', '=', 'done')]</field>
         <field name="context">{'search_default_done_student':1}</field>
         <field name="res_model">student.student</field>
-        <field name="view_type">form</field>
-        <field name="view_id" ref="" />
+         <field name="view_id" ref="" />
         <field name="search_view_id" ref="view_student_student_search_1" />
         <field name="view_mode">kanban,tree,form</field>
     </record>
@@ -673,7 +671,6 @@
         <field name="name">Student Alumni</field>
         <field name="domain">[('active','=',False)]</field>
         <field name="res_model">student.student</field>
-        <field name="view_type">form</field>
         <field name="view_mode">kanban,tree,form</field>
     </record>
 
