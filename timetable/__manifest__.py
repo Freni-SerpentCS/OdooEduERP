@@ -1,8 +1,9 @@
 # See LICENSE file for full copyright and licensing details.
 
+
 {
     'name': 'Timetable Management',
-    'version': '13.0.1.0.0',
+    'version': '12.0.1.0.0',
     'author': '''Serpent Consulting Services Pvt. Ltd.''',
     'website': 'http://www.serpentcs.com',
     'license': "AGPL-3",
