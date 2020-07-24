@@ -365,6 +365,8 @@ class SubjectSubject(models.Model):
     is_practical = fields.Boolean('Is Practical',
                                   help='Check this if subject is practical.')
     elective_id = fields.Many2one('subject.elective')
+    is_elective = fields.Boolean('Is Elective',
+                                 help='Check this if subject is Elective.')
     student_ids = fields.Many2many('student.student',
                                    'elective_subject_student_rel',
                                    'subject_id', 'student_id', 'Students')

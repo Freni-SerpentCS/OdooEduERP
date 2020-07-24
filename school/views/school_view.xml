@@ -696,6 +696,7 @@
                         <field name="maximum_marks" placeholder="Maximum Marks"/>
                         <field name="minimum_marks" placeholder="Minimum Marks"/>
                         <field name="is_practical" />
+                        <field name="is_elective" />
                         <field name="elective_id" string="Elective Group" readonly="1" />
                     </group>
                     <notebook colspan="4">
@@ -718,8 +719,16 @@
                             <field name="teacher_ids" nolabel="1" colspan="4"
                                  options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
                         </page>
-                        <page string="Students" attrs="{'invisible':[('elective_id','!=',True)]}">
-                            <field name="student_ids" nolabel="1" />
+                        <page string="Students" attrs="{'invisible':[('is_elective','=', False)]}">
+                            <field name="student_ids" nolabel="1">
+                                <tree>
+                                    <field name="student_code" />
+                                    <field name="name"/>
+                                    <field name="standard_id"/>
+                                    <field name="division_id"/>
+                                    <field name="year"/>
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>

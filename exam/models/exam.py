@@ -122,10 +122,10 @@ class ExtendedTimeTableLine(models.Model):
 
     @api.constrains('teacher_id')
     def check_supervisior_exam(self):
-            for rec in self:
-                if (rec.table_id.timetable_type == 'exam' and
-                        not rec.teacher_id):
-                        raise ValidationError(_('''PLease Enter Supervisior!
+        for rec in self:
+            if (rec.table_id.timetable_type == 'exam' and
+                    not rec.teacher_id):
+                raise ValidationError(_('''PLease Enter Supervisior!
                         '''))
 
     @api.constrains('start_time', 'end_time')
@@ -146,7 +146,7 @@ class ExtendedTimeTableLine(models.Model):
                             self.table_id.timetable_type == 'exam' and
                             self.class_room_id == record.class_room_id and
                             self.start_time == record.start_time):
-                            raise ValidationError(_("The room is occupied!"))
+                        raise ValidationError(_("The room is occupied!"))
 
     @api.constrains('subject_id', 'class_room_id')
     def check_exam_date(self):
@@ -161,7 +161,7 @@ class ExtendedTimeTableLine(models.Model):
                 if (record.timetable_type == 'exam' and
                         self.table_id.timetable_type == 'exam' and
                         self.subject_id == rec.subject_id):
-                        raise ValidationError(_('''%s Subject Exam Already
+                    raise ValidationError(_('''%s Subject Exam Already
                         Taken''') % (self.subject_id.name))
                 if (record.timetable_type == 'exam' and
                         self.table_id.timetable_type == 'exam' and
@@ -284,17 +284,24 @@ class ExamExam(models.Model):
                                    'roll_no_id': student.roll_no,
                                    'grade_system': rec.grade_system.id,
                                    }
-                        exam_line = []
+                        result = result_obj.create(rs_dict)
                         timetable = exam_schedule.sudo().timetable_id
                         for line in timetable.sudo().timetable_ids:
                             min_mrks = line.subject_id.minimum_marks
                             max_mrks = line.subject_id.maximum_marks
-                            sub_vals = {'subject_id': line.subject_id.id,
-                                        'minimum_marks': min_mrks,
-                                        'maximum_marks': max_mrks}
-                            exam_line.append((0, 0, sub_vals))
-                        rs_dict.update({'result_ids': exam_line})
-                        result = result_obj.create(rs_dict)
+                            if line.subject_id.is_elective and \
+                                    student in line.subject_id.student_ids:
+                                sub_vals = {'subject_id': line.subject_id.id,
+                                            'minimum_marks': min_mrks,
+                                            'maximum_marks': max_mrks,
+                                            'exam_id': result.id}
+                            else:
+                                sub_vals = {'subject_id': line.subject_id.id,
+                                            'minimum_marks': min_mrks,
+                                            'maximum_marks': max_mrks,
+                                            'exam_id': result.id}
+                            sub_line = self.env['exam.subject'].create(
+                                sub_vals)
                         result_list.append(result.id)
         return {'name': _('Result Info'),
                 'view_type': 'form',
@@ -428,7 +435,7 @@ class ExamResult(models.Model):
             if rec.result_ids:
                 for grade in rec.result_ids:
                     if not grade.grade_line_id.fail:
-                            rec.result = 'Pass'
+                        rec.result = 'Pass'
                     else:
                         flag = True
             if flag:
@@ -594,15 +601,16 @@ class ExamSubject(models.Model):
                     'marks_reeval')
     def _validate_marks(self):
         '''Method to validate marks'''
-        if self.obtain_marks > self.maximum_marks:
-            raise ValidationError(_('''The obtained marks
-            should not extend maximum marks!'''))
-        if self.minimum_marks > self.maximum_marks:
-            raise ValidationError(_('''The minimum marks
-            should not extend maximum marks!'''))
-        if(self.marks_reeval > self.maximum_marks):
-            raise ValidationError(_('''The revaluation marks
-            should not extend maximum marks!'''))
+        for rec in self:
+            if rec.obtain_marks > self.maximum_marks:
+                raise ValidationError(_('''The obtained marks
+                should not extend maximum marks!'''))
+            if rec.minimum_marks > self.maximum_marks:
+                raise ValidationError(_('''The minimum marks
+                should not extend maximum marks!'''))
+            if(rec.marks_reeval > rec.maximum_marks):
+                raise ValidationError(_('''The revaluation marks
+                should not extend maximum marks!'''))
 
     @api.depends('exam_id', 'obtain_marks', 'marks_reeval')
     def _compute_grade(self):
