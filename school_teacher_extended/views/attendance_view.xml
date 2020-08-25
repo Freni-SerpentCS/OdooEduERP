@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record id="view_daily_attendance_form_inherited" model="ir.ui.view">
+            <field name="name">daily.attendance.form.inherited</field>
+            <field name="model">daily.attendance</field>
+            <field name="inherit_id" ref="school_attendance.view_daily_attendance_form_1"/>
+            <field name="arch" type="xml">
+                <field name="date" position="after">
+                    <field name="subject_id"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
